@@ -9,13 +9,28 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SocialiteController extends Controller
 {
-    public function redirect(string $provider): RedirectResponse
+    public function redirect(Request $request, string $provider): RedirectResponse
     {
-        return Socialite::driver($provider)->redirect();
+        $request->validate([
+            'uri' => 'string|min:1',
+        ]);
+
+        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
     }
 
-    public function callback(string $provider): User
+    public function callback(Request $request, string $provider): User
     {
-        return Socialite::driver($provider)->user();
+        $request->validate([
+            'state' => 'string',
+        ]);
+
+        $socialite = Socialite::driver($provider);
+        $state = $request->get('state');
+
+        if ($state && $state !== 'state') {
+            $socialiteUser = $socialite->stateless()->redirectUrl($state)->user();
+        }
+
+        return $socialite->stateless()->user();
     }
 }
