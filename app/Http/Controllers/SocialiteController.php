@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Contracts\User;
 use Laravel\Socialite\Facades\Socialite;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SocialiteController extends Controller
 {
-    public function redirect(Request $request, string $provider): RedirectResponse
+    public function redirect(Request $request, string $provider): string
     {
         $request->validate([
             'uri' => 'string|min:1',
@@ -28,7 +27,7 @@ class SocialiteController extends Controller
         $state = $request->get('state');
 
         if ($state && $state !== 'state') {
-            $socialiteUser = $socialite->stateless()->redirectUrl($state)->user();
+            return $socialite->stateless()->redirectUrl($state)->user();
         }
 
         return $socialite->stateless()->user();
