@@ -12,7 +12,7 @@ class FileController extends Controller
      */
     public function uploadImages(Request $request): array
     {
-        $filesCount = count($request->get('files', []));
+        $filesCount = count($request->file('files', []));
         $pathsCount = count($request->get('paths', []));
 
         $data = $request->validate([
@@ -22,11 +22,13 @@ class FileController extends Controller
             'paths.*' => 'required|string',
         ]);
 
+        $paths = [];
+
         foreach ($data['files'] as $key => $file) {
-            Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
+            $paths[] = Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
         }
 
-        return $request->get('path', []);
+        return $paths;
     }
 
     /**
@@ -34,7 +36,7 @@ class FileController extends Controller
      */
     public function uploadDocuments(Request $request): array
     {
-        $docsCount = count($request->get('docs', []));
+        $docsCount = count($request->file('docs', []));
         $pathsCount = count($request->get('paths', []));
 
         $data = $request->validate([
@@ -44,10 +46,12 @@ class FileController extends Controller
             'paths.*' => 'required|string',
         ]);
 
-        foreach ($data['files'] as $key => $file) {
-            Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
+        $paths = [];
+
+        foreach ($data['docs'] as $key => $file) {
+            $paths[] = Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
         }
 
-        return $request->get('path', []);
+        return $paths;
     }
 }
