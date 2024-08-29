@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.8",
+        "league/flysystem-aws-s3-v3": "3.0",
         "socialiteproviders/discord": "^4.2"
     },
     "require-dev": {
