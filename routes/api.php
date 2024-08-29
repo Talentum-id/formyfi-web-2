@@ -16,3 +16,4 @@ Route::prefix('auth')->group(function () {
 
 Route::post('/upload-images', [FileController::class, 'uploadImages']);
 Route::post('/upload-docs', [FileController::class, 'uploadDocuments']);
+Route::post('/delete-files', [FileController::class, 'deleteFiles']);

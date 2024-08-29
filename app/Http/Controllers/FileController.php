@@ -54,4 +54,16 @@ class FileController extends Controller
 
         return $paths;
     }
+
+    public function deleteFiles(Request $request): void
+    {
+        $data = $request->validate([
+            'paths' => 'required|array',
+            'paths.*' => 'required|string',
+        ]);
+
+        foreach ($data['paths'] as $path) {
+            Storage::delete($path);
+        }
+    }
 }
