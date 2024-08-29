@@ -25,10 +25,30 @@ class FileController extends Controller
         $paths = [];
 
         foreach ($data['files'] as $key => $file) {
-            $paths[] = Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
+            $paths[] = Storage::put($data['paths'][$key], $file);
         }
 
         return $paths;
+    }
+
+    public function uploadOldFiles(Request $request): void
+    {
+        $filesCount = count($request->file('files', []));
+        $pathsCount = count($request->get('paths', []));
+
+        $data = $request->validate([
+            'files' => 'required|array|size:' . $pathsCount,
+            'files.*' => 'required|file',
+            'paths' => 'required|array|size:' . $filesCount,
+            'paths.*' => 'required|string',
+        ]);
+
+        foreach ($data['files'] as $key => $file) {
+            $fileName = str($data['paths'][$key])->afterLast('/');
+            $filePath = str($data['paths'][$key])->beforeLast('/');
+
+            Storage::putFileAs($filePath, $file, $fileName);
+        }
     }
 
     /**
@@ -49,7 +69,7 @@ class FileController extends Controller
         $paths = [];
 
         foreach ($data['docs'] as $key => $file) {
-            $paths[] = Storage::put(sprintf('%s/%s/', config('app.env'), $data['paths'][$key]), $file);
+            $paths[] = Storage::put($data['paths'][$key], $file);
         }
 
         return $paths;
