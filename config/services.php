@@ -25,4 +25,8 @@ return [
         'client_secret' => env('TWITTER_CLIENT_SECRET'),
         'redirect' => env('TWITTER_CALLBACK_URL'),
     ],
+    'social_verifiers' => [
+        'discord_endpoint' => env('DISCORD_ENDPOINT'),
+        'twitter_endpoint' => env('TWITTER_ENDPOINT'),
+    ],
 ];
