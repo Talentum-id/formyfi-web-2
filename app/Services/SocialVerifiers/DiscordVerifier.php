@@ -15,7 +15,7 @@ class DiscordVerifier extends BaseVerifier
     protected function sendVerificationRequest(string $endpoint): bool
     {
         try {
-            $response = Http::baseUrl(config('services.verifiers.discord_endpoint'))->get($endpoint);
+            $response = Http::baseUrl(config('services.social_verifiers.discord_endpoint'))->get($endpoint);
 
             return $response->ok();
         } catch (ClientException) {
