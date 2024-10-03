@@ -12,7 +12,8 @@ class SocialVerificationController extends Controller
 {
     public function verify(string $provider, Request $request): JsonResponse
     {
-        $availableActions = array_map(fn(TwitterVerificationActions $action) => $action->name,
+        $availableActions = array_map(
+            fn(TwitterVerificationActions|DiscordVerificationActions $action) => $action->name,
             $provider === 'twitter'
                 ? TwitterVerificationActions::cases()
                 : DiscordVerificationActions::cases()
