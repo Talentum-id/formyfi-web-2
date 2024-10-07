@@ -42,7 +42,7 @@ class TwitterVerifier extends BaseVerifier
 
     protected function follow(string $providerId, string $source): bool
     {
-        $user = $this->user(getTwitterUsername($source));
+        $user = $this->user($source);
 
         if ($user === null) {
             return false;
