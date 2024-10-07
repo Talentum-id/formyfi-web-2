@@ -7,4 +7,5 @@ enum TwitterVerificationActions
     case retweet;
     case like;
     case follow;
+    case reply;
 }

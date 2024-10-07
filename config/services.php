@@ -28,5 +28,6 @@ return [
     'social_verifiers' => [
         'discord_endpoint' => env('DISCORD_ENDPOINT'),
         'twitter_endpoint' => env('TWITTER_ENDPOINT'),
+        'twitter_api_key' => env('TWITTER_API_KEY'),
     ],
 ];

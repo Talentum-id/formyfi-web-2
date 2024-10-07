@@ -29,6 +29,17 @@ class TwitterVerifier extends BaseVerifier
         return $this->sendVerificationRequest(sprintf('retweet/v2/%s/%s', $providerId, $tweetId));
     }
 
+    protected function reply(string $providerId, string $source): bool
+    {
+        $tweetId = getTwitterTweetId($source);
+
+        if ($tweetId == null) {
+            return false;
+        }
+
+        return $this->sendVerificationRequest(sprintf('replies/v2/%s/%s', $providerId, $tweetId));
+    }
+
     protected function follow(string $providerId, string $source): bool
     {
         $user = $this->user(getTwitterUsername($source));
@@ -45,6 +56,9 @@ class TwitterVerifier extends BaseVerifier
         try {
             $response = Http
                 ::baseUrl(config('services.social_verifiers.twitter_endpoint'))
+                ->withHeaders([
+                    'Authorization' => config('services.social_verifiers.twitter_api_key'),
+                ])
                 ->get(sprintf('users/%s', $username));
             $data = $response->json();
 
@@ -61,7 +75,12 @@ class TwitterVerifier extends BaseVerifier
     protected function sendVerificationRequest(string $endpoint): bool
     {
         try {
-            $response = Http::baseUrl(config('services.social_verifiers.twitter_endpoint'))->get($endpoint);
+            $response = Http
+                ::baseUrl(config('services.social_verifiers.twitter_endpoint'))
+                ->withHeaders([
+                    'Authorization' => config('services.social_verifiers.twitter_api_key'),
+                ])
+                ->get($endpoint);
             $data = $response->json();
 
             if (empty($data) && !$response->ok()) {
