@@ -19,3 +19,16 @@ if (!function_exists('getTwitterUsername')) {
         return substr($name, 1);
     }
 }
+
+if (!function_exists('getDiscordInviteCode')) {
+    function getDiscordInviteCode(?string $url): ?string
+    {
+        preg_match(
+            '/^(https?:\/\/)?(discord(?:(?:app)?\.com\/invite|\.gg)(?:\/invite)?)\/(?<code>[\w-]{2,255})/i',
+            $url,
+            $discordMatches,
+        );
+
+        return $discordMatches['code'] ?? null;
+    }
+}
