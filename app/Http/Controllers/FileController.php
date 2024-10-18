@@ -17,7 +17,7 @@ class FileController extends Controller
 
         $data = $request->validate([
             'files' => 'required|array|size:' . $pathsCount,
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'paths' => 'required|array|size:' . $filesCount,
             'paths.*' => 'required|string',
         ]);
@@ -61,7 +61,7 @@ class FileController extends Controller
 
         $data = $request->validate([
             'docs' => 'required|array|size:' . $pathsCount,
-            'docs.*' => 'required|file|max:4092',
+            'docs.*' => 'required|file|max:5120',
             'paths' => 'required|array|size:' . $docsCount,
             'paths.*' => 'required|string',
         ]);
