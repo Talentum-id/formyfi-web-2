@@ -39,28 +39,31 @@
         <div class="title">{{ strip_tags($quest['description'], '<p><br>') }}</div>
     </div>
     <div class="flex flex-col w-full gap-[16px] mt-[32px]">
-        @foreach($quest['questions'] as $index => $question)
+        @foreach ($quest['questions'] as $index => $question)
             <div>
                 <div class="card">
                     <div class="head flex justify-between w-full">
                         <div class="step">{{ $index + 1 }}/{{ count($quest['questions']) }}</div>
-                        @if($question['required'])
+                        @if ($question['required'])
                             <div class="required">Required</div>
                         @endif
                     </div>
                     @if (isset($question['file']))
                         <div class="w-full flex justify-center">
-                            <img src="{{ $question['file'] }}" class="w-[160px] h-[160px]" alt="">
+                            <img src="{{ config('filesystems.s3.url').'/'.$question['file'] }}"
+                                 class="w-[160px] h-[160px]"
+                                 alt=""
+                            />
                         </div>
                     @endif
                     <span class="title">{{ $question['question'] }}</span>
-                    @if (isset($answers[$index]))
+                    @if (isset($answers['answers'][$index]))
                         <div>
                             @if ($question['questionType'] === 'quiz')
                                 <div class="flex flex-col gap-[16px] w-full">
-                                    @foreach($question['answers'] as $answer)
+                                    @foreach ($question['answers'] as $answer)
                                         <div class="flex items-center gap-x-[8px]">
-                                            @if($answers[$index]['answer'] === $answer['answer'] && $answers[$index]['isCorrect'])
+                                            @if ($answers['answers'][$index]['answer'] === $answer['answer'] && $answers['answers'][$index]['isCorrect'])
                                                 <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
                                                 <div class="item isCorrect">{{ $answer['answer'] }}</div>
                                             @else
@@ -68,7 +71,7 @@
                                                 <div class="item isIncorrect">{{ $answer['answer'] }}</div>
                                             @endif
                                         </div>
-                                        @if ($question['openAnswerAllowed'] && !in_array($anwers[$index]['answer'], array_column($question['answers'], 'answer')))
+                                        @if ($question['openAnswerAllowed'] && !in_array($answers['answers'][$index]['answer'], array_column($question['answers'], 'answer')))
                                             <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
                                             <div class="item isCorrect">{{ $answer['answer'] }}</div>
                                         @endif
@@ -78,7 +81,7 @@
                                 <div class="flex flex-col gap-[16px] w-full">
                                     @foreach($question['answers'] as $answer)
                                         <div class="flex items-center gap-x-[8px]">
-                                            @if(isset($answers[$index]['answer']) && in_array($answer['answer'], json_decode($answer[$index]['answer'])))
+                                            @if(isset($answers['answers'][$index]['answer']) && in_array($answer['answer'], json_decode($answers['answers'][$index]['answer'])))
                                                 <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
                                                 <div class="item isCorrect">{{ $answer['answer'] }}</div>
                                             @else
@@ -86,7 +89,7 @@
                                                 <div class="item isIncorrect">{{ $answer['answer'] }}</div>
                                             @endif
                                         </div>
-                                        @if ($question['openAnswerAllowed'] && !in_array($anwers[$index]['answer'], array_column($question['answers'], 'answer')))
+                                        @if ($question['openAnswerAllowed'] && !in_array($answers['answers'][$index]['answer'], array_column($question['answers'], 'answer')))
                                             <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
                                             <div class="item isCorrect">{{ $answer['answer'] }}</div>
                                         @endif
@@ -95,37 +98,52 @@
                             @else
                                 <div class="w-full">
                                     @if ($question['questionType'] === 'address')
-                                        @if(isset($answers[$index]['answer']) || $answers[$index]['isCorrect'])
+                                        @if (isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
                                             <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
-                                            <div class="item isCorrect">{{ implode(', ', array_values(json_decode($answer['answer'])) }}</div>
+                                            <div class="item isCorrect">
+                                                {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
+                                            </div>
                                         @else
                                             <img src="{{ asset('assets/icons/incorrect.svg') }}" alt="incorrect"/>
-                                            <div class="item isIncorrect">{{ implode(', ', array_values(json_decode($answer['answer'])) }}</div>
+                                            <div class="item isIncorrect">
+                                                {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
+                                            </div>
                                         @endif
                                     @elseif ($question['questionType'] === 'date')
-                                        @if(isset($answers[$index]['answer']) || $answers[$index]['isCorrect'])
+                                        @if(isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
                                             <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
-                                            <div class="item isCorrect">{{ date('D M j Y', $answers[$index]['answer']) }}</div>
+                                            <div class="item isCorrect">
+                                                {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
+                                            </div>
                                         @else
                                             <img src="{{ asset('assets/icons/incorrect.svg') }}" alt="incorrect"/>
-                                            <div class="item isIncorrect">{{ date('D M j Y', $answers[$index]['answer']) }}</div>
+                                            <div class="item isIncorrect">
+                                                {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
+                                            </div>
                                         @endif
                                     @else
-                                        @if(isset($answers[$index]['answer']) || $answers[$index]['isCorrect'])
+                                        @if (isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
                                             <img src="{{asset('assets/icons/completed.svg')}}" alt="incorrect"/>
-                                            <div class="item isCorrect">{{ $answers[$index]['answer'] ?: 'No Answer' }}</div>
+                                            <div class="item isCorrect">
+                                                {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
+                                            </div>
                                         @else
                                             <img src="{{ asset('assets/icons/incorrect.svg') }}" alt="incorrect"/>
-                                            <div class="item isIncorrect">{{ $answers[$index]['answer'] ?: 'No Answer' }}</div>
+                                            <div class="item isIncorrect">
+                                                {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
+                                            </div>
                                         @endif
                                     @endif
                                 </div>
                             @endif
                         </div>
                     @endif
-                    @if (isset($answers[$index]['file']))
+                    @if (isset($answers['answers'][$index]['file']))
                         <div>
-                            <img src="{{ $answers[$index]['file'] }}" class="w-[160px] h-[160px]" alt="">
+                            <img src="{{ config('filesystems.s3.url').'/'.$answers['answers'][$index]['file'] }}"
+                                 class="w-[160px] h-[160px]"
+                                 alt=""
+                            >
                         </div>
                     @endif
                 </div>
