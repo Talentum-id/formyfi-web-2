@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\SocialVerificationController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,4 @@ Route::post('/upload-images', [FileController::class, 'uploadImages']);
 Route::post('/upload-old-files', [FileController::class, 'uploadOldFiles']);
 Route::post('/upload-docs', [FileController::class, 'uploadDocuments']);
 Route::post('/delete-files', [FileController::class, 'deleteFiles']);
+Route::post('/responses/dispatch', [ResponseController::class, 'dispatch']);
