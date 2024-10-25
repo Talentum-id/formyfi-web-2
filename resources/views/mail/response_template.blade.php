@@ -4,7 +4,7 @@
     <title>{{ config('app.name')  }} - Form Submission</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .item {
             width: 100%;
@@ -31,138 +31,110 @@
     </style>
 </head>
 <body>
-<div class="result-wrapper">
+<div class="container my-5" style="max-width: 800px">
     <div class="header">
-        <div class="head-title">
-            <span>{{ $quest['title'] }}</span>
+        <div class="mb-3">
+            <h1>{{ $quest['title'] }}</h1>
         </div>
-        <div class="title">{{ strip_tags($quest['description'], '<p><br>') }}</div>
+        <div>{!! strip_tags($quest['description'], '<p><br>') !!}</div>
     </div>
-    <div class="flex flex-col w-full gap-[16px] mt-[32px]">
+
+    <div class="mt-4">
         @foreach ($quest['questions'] as $index => $question)
-            <div>
-                <div class="card">
-                    <div class="head flex justify-between w-full">
-                        <div class="step">{{ $index + 1 }}/{{ count($quest['questions']) }}</div>
-                        @if ($question['required'])
-                            <div class="required">Required</div>
-                        @endif
-                    </div>
-                    @if (isset($question['file']))
-                        <div class="w-full flex justify-center">
-                            <img src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$question['file']) }}"
-                                 class="w-[160px] h-[160px]"
-                                 alt=""
-                            />
-                        </div>
-                    @endif
-                    <span class="title">{{ $question['question'] }}</span>
-                    @if (isset($answers['answers'][$index]))
-                        <div>
-                            @if ($question['questionType'] === 'quiz')
-                                <div class="flex flex-col gap-[16px] w-full">
-                                    @foreach ($question['answers'] as $answer)
-                                        <div class="flex items-center gap-x-[8px]">
-                                            @if ($answers['answers'][$index]['answer'] === $answer['answer'] && $answers['answers'][$index]['isCorrect'])
-                                                <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                     alt="incorrect"/>
-                                                <div class="item isCorrect">{{ $answer['answer'] }}</div>
-                                            @else
-                                                <img src="{{ $message->embed(asset('assets/icons/incorrect.svg')) }}"
-                                                     alt="incorrect"/>
-                                                <div class="item isIncorrect">{{ $answer['answer'] }}</div>
-                                            @endif
-                                        </div>
-                                        @if ($question['openAnswerAllowed'] && !in_array($answers['answers'][$index]['answer'], array_column($question['answers'], 'answer')))
-                                            <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isCorrect">{{ $answer['answer'] }}</div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @elseif ($question['questionType'] === 'multiple')
-                                <div class="flex flex-col gap-[16px] w-full">
-                                    @foreach($question['answers'] as $answer)
-                                        <div class="flex items-center gap-x-[8px]">
-                                            @if(isset($answers['answers'][$index]['answer']) && in_array($answer['answer'], json_decode($answers['answers'][$index]['answer'])))
-                                                <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                     alt="incorrect"/>
-                                                <div class="item isCorrect">{{ $answer['answer'] }}</div>
-                                            @else
-                                                <img src="{{ $message->embed(asset('assets/icons/incorrect.svg')) }}"
-                                                     alt="incorrect"/>
-                                                <div class="item isIncorrect">{{ $answer['answer'] }}</div>
-                                            @endif
-                                        </div>
-                                        @if ($question['openAnswerAllowed'] && !in_array($answers['answers'][$index]['answer'], array_column($question['answers'], 'answer')))
-                                            <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isCorrect">{{ $answer['answer'] }}</div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="w-full">
-                                    @if ($question['questionType'] === 'address')
-                                        @if (isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
-                                            <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isCorrect">
-                                                {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
-                                            </div>
-                                        @else
-                                            <img src="{{ $message->embed(asset('assets/icons/incorrect.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isIncorrect">
-                                                {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
-                                            </div>
-                                        @endif
-                                    @elseif ($question['questionType'] === 'date')
-                                        @if(isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
-                                            <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isCorrect">
-                                                {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
-                                            </div>
-                                        @else
-                                            <img src="{{ $message->embed(asset('assets/icons/incorrect.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isIncorrect">
-                                                {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if (isset($answers['answers'][$index]['answer']) || $answers['answers'][$index]['isCorrect'])
-                                            <img src="{{ $message->embed(asset('assets/icons/completed.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isCorrect">
-                                                {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
-                                            </div>
-                                        @else
-                                            <img src="{{ $message->embed(asset('assets/icons/incorrect.svg')) }}"
-                                                 alt="incorrect"/>
-                                            <div class="item isIncorrect">
-                                                {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
-                                            </div>
-                                        @endif
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-                    @if (isset($answers['answers'][$index]['file']))
-                        <div>
-                            <img
-                                src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$answers['answers'][$index]['file']) }}"
-                                class="w-[160px] h-[160px]"
-                                alt=""
-                            >
-                        </div>
+            <div class="card my-3 p-3">
+                <div class="d-flex justify-content-between">
+                    <div>{{ $index + 1 }}/{{ count($quest['questions']) }}</div>
+                    @if ($question['required'])
+                        <div class="text-danger">Required</div>
                     @endif
                 </div>
+
+                @if (isset($question['file']))
+                    <div class="text-center my-3">
+                        <img src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$question['file']) }}"
+                             class="img-thumbnail" style="object-fit: cover; width: 250px; height: 100%; border-radius: 10px" alt="">
+                    </div>
+                @endif
+
+                <p class="h5 fw-bold">{{ $question['question'] }}</p>
+
+                @if (isset($answers['answers'][$index]))
+                    <div>
+                        @if ($question['questionType'] === 'quiz')
+                            <div class="d-flex flex-column gap-3">
+                                @foreach ($question['answers'] as $answer)
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if ($answers['answers'][$index]['answer'] === $answer['answer'] && $answers['answers'][$index]['isCorrect'])
+                                            <div class="item isCorrect">{{ $answer['answer'] }}</div>
+                                        @else
+                                            <div class="item isIncorrect">{{ $answer['answer'] }}</div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @elseif ($question['questionType'] === 'multiple')
+                            <div class="d-flex flex-column gap-3">
+                                @foreach($question['answers'] as $answer)
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if(isset($answers['answers'][$index]['answer']) && in_array($answer['answer'], json_decode($answers['answers'][$index]['answer'])))
+                                            <div class="item isCorrect">{{ $answer['answer'] }}</div>
+                                        @else
+                                            <div class="item isIncorrect">{{ $answer['answer'] }}</div>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @elseif ($question['questionType'] === 'address')
+                            <div class="w-100">
+                                @if (isset($answers['answers'][$index]['answer']) && $answers['answers'][$index]['isCorrect'])
+                                    <div class="item isCorrect">
+                                        {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
+                                    </div>
+                                @else
+                                    <div class="item isIncorrect">
+                                        {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
+                                    </div>
+                                @endif
+                            </div>
+                        @elseif ($question['questionType'] === 'date')
+                            <div class="w-100">
+                                @if (isset($answers['answers'][$index]['answer']) && $answers['answers'][$index]['isCorrect'])
+                                    <div class="item isCorrect">
+                                        {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
+                                    </div>
+                                @else
+                                    <div class="item isIncorrect">
+                                        {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="w-100">
+                                @if (isset($answers['answers'][$index]['answer']) && $answers['answers'][$index]['isCorrect'])
+                                    <div class="item isCorrect">
+                                        {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
+                                    </div>
+                                @else
+                                    <div class="item isIncorrect">
+                                        {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
+                @if (isset($answers['answers'][$index]['file']))
+                    <div class="text-center my-3">
+                        <img
+                            src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$answers['answers'][$index]['file']) }}"
+                            class="img-thumbnail" style="object-fit: cover; width: 250px; height: 100%; border-radius: 10px" alt="">
+                    </div>
+                @endif
             </div>
         @endforeach
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
