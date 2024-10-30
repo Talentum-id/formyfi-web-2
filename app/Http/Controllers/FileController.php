@@ -10,14 +10,14 @@ class FileController extends Controller
     /**
      * @return string[]
      */
-    public function uploadImages(Request $request): array
+    public function uploadFiles(Request $request): array
     {
         $filesCount = count($request->file('files', []));
         $pathsCount = count($request->get('paths', []));
 
         $data = $request->validate([
             'files' => 'required|array|size:' . $pathsCount,
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'files.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi,mov,webm,mp3,wav,aac,flac,m4a|max:5120',
             'paths' => 'required|array|size:' . $filesCount,
             'paths.*' => 'required|string',
         ]);
