@@ -17,7 +17,7 @@ class FileController extends Controller
 
         $data = $request->validate([
             'files' => 'required|array|size:' . $pathsCount,
-            'files.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi,mov,webm,mp3,wav,aac,flac,m4a|max:5120',
+            'files.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi,mov,webm,mp3,wav,aac,flac,m4a|max:50000',
             'paths' => 'required|array|size:' . $filesCount,
             'paths.*' => 'required|string',
         ]);
