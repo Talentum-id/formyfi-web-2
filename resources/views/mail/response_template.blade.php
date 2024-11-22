@@ -29,18 +29,18 @@
 
                 <p>
                     <span style="font-weight: bold;">{{ $question['question'] }} -- </span>
-                    @if (isset($answers['answers'][$index]))
+                    @if (isset($answers[$index]))
                         @if ($question['questionType'] === 'address')
                             <span>
-                                {{ implode(', ', array_values(json_decode($answers['answers'][$index]['answer'], true))) }}
+                                {{ implode(', ', array_values(json_decode($answers[$index]['answer'], true))) }}
                             </span>
                         @elseif ($question['questionType'] === 'date')
                             <span>
-                                {{ date('D M j Y', $answers['answers'][$index]['answer']) }}
+                                {{ date('D M j Y', $answers[$index]['answer']) }}
                             </span>
                         @else
                             <span>
-                                {{ $answers['answers'][$index]['answer'] ?: 'No Answer' }}
+                                {{ $answers[$index]['answer'] ?: 'No Answer' }}
                             </span>
                         @endif
                     @endif
