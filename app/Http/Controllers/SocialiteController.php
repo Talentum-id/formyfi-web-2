@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\SocialAuthentication\GoogleAuthenticationService;
-use App\Services\ZkIdentity\ZkIdentityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -32,11 +31,7 @@ class SocialiteController extends Controller
                 $socialiteUser->email = $googleTokenInfo->email;
             }
 
-            /** @var ZkIdentityService $zkIdentityService */
-            $zkIdentityService = app(ZkIdentityService::class);
-            $zkIdentity = $zkIdentityService->geyByProviderIdAndName($provider, $socialiteUser->getId());
-
-            return response()->json($zkIdentity);
+            return response()->json($socialiteUser->email ?? $socialiteUser->getEmail());
         } catch (\Exception) {
             throw new ('Invalid token or provider');
         }
