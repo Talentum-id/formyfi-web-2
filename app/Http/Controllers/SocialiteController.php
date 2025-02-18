@@ -2,12 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\SocialAuthentication\GoogleAuthenticationService;
+use App\Services\ZkIdentity\ZkIdentityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\User as SocialiteUser;
 
 class SocialiteController extends Controller
 {
+    public function authorizeWithToken(Request $request, string $provider): JsonResponse
+    {
+        $data = $request->validate([
+            'address' => 'required',
+            'token' => 'required',
+        ]);
+
+        try {
+            try {
+                $socialiteUser = Socialite::driver($provider)->userFromToken($data['token']);
+            } catch (\Exception) {
+                $googleTokenInfo = GoogleAuthenticationService::getInstance()->request('/v3/tokeninfo', [
+                    'id_token' => $data['token'],
+                ]);
+
+                $socialiteUser = new SocialiteUser();
+                $socialiteUser->id = $googleTokenInfo->sub;
+                $socialiteUser->name = $googleTokenInfo->name;
+                $socialiteUser->email = $googleTokenInfo->email;
+            }
+
+            /** @var ZkIdentityService $zkIdentityService */
+            $zkIdentityService = app(ZkIdentityService::class);
+            $zkIdentity = $zkIdentityService->geyByProviderIdAndName($provider, $socialiteUser->getId());
+
+            return response()->json($zkIdentity);
+        } catch (\Exception) {
+            throw new ('Invalid token or provider');
+        }
+    }
+
     public function redirect(Request $request, string $provider): JsonResponse
     {
         $request->validate([

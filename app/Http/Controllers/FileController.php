@@ -7,30 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    /**
-     * @return string[]
-     */
-    public function uploadFiles(Request $request): array
-    {
-        $filesCount = count($request->file('files', []));
-        $pathsCount = count($request->get('paths', []));
-
-        $data = $request->validate([
-            'files' => 'required|array|size:' . $pathsCount,
-            'files.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg,mp4,mkv,avi,mov,webm,mp3,wav,aac,flac,m4a|max:50000',
-            'paths' => 'required|array|size:' . $filesCount,
-            'paths.*' => 'required|string',
-        ]);
-
-        $paths = [];
-
-        foreach ($data['files'] as $key => $file) {
-            $paths[] = Storage::put($data['paths'][$key], $file);
-        }
-
-        return $paths;
-    }
-
     public function uploadOldFiles(Request $request): void
     {
         $filesCount = count($request->file('files', []));
