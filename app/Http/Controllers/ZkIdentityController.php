@@ -30,7 +30,7 @@ class ZkIdentityController extends Controller
             'jwt' => 'required',
             'extendedEphemeralPublicKey' => 'required',
             'salt' => 'required',
-            'kyeClaimName' => 'required',
+            'keyClaimName' => 'required',
             'randomness' => 'required',
             'maxEpoch' => 'required',
             'provider' => 'required',
