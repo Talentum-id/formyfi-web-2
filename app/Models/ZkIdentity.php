@@ -30,4 +30,11 @@ class ZkIdentity extends Model
         'zero_knowledge_proof',
         'zero_knowledge_proof_expired',
     ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'zero_knowledge_proof' => 'json',
+    ];
 }

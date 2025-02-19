@@ -26,6 +26,8 @@ readonly class ZkIdentityService
             ->post(config('zklogin.uri'), $data);
 
         $this->zkIdentityRepository->updateOrCreate([
+            'private_key' => $data['secret_key'],
+            'max_epoch' => $data['maxEpoch'],
             'zero_knowledge_proof' => $request->json(),
             'zero_knowledge_proof_expired' => now()->addDays(28),
             'randomness' => $data['jwtRandomness'],
