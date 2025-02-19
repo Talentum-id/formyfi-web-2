@@ -28,6 +28,7 @@ readonly class ZkIdentityService
         $this->zkIdentityRepository->updateOrCreate([
             'zero_knowledge_proof' => $request->json(),
             'zero_knowledge_proof_expired' => now()->addDays(28),
+            'randomness' => $data['jwtRandomness'],
             ...$data,
         ]);
     }
