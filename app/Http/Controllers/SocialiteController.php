@@ -43,9 +43,12 @@ class SocialiteController extends Controller
             'uri' => 'string|min:1',
         ]);
 
-        return response()->json([
-            'url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl(),
-        ]);
+        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        if ($url) {
+            $url = str_replace('twitter.com/', 'x.com/', $url);
+        }
+
+        return response()->json(compact('url'));
     }
 
     public function callback(Request $request, string $provider): JsonResponse
