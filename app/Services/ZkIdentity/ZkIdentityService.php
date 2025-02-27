@@ -20,18 +20,21 @@ readonly class ZkIdentityService
 
     public function updateOrCreate(array $data): void
     {
-        $request = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])
-            ->post(config('zklogin.uri'), $data);
+        $zkIdentity = $this->zkIdentityRepository->getByProviderIdAndName($data['provider'], $data['provider_id']);
+        if (!$zkIdentity || $zkIdentity->zero_knowledge_proof_expired < now()->subDay()) {
+            $request = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])
+                ->post(config('zklogin.uri'), $data);
 
-        $this->zkIdentityRepository->updateOrCreate([
-            'private_key' => $data['secret_key'],
-            'max_epoch' => $data['maxEpoch'],
-            'zero_knowledge_proof' => $request->json(),
-            'zero_knowledge_proof_expired' => now()->addDays(28),
-            'randomness' => $data['jwtRandomness'],
-            ...$data,
-        ]);
+            $this->zkIdentityRepository->updateOrCreate([
+                'private_key' => $data['secret_key'],
+                'max_epoch' => $data['maxEpoch'],
+                'zero_knowledge_proof' => $request->json(),
+                'zero_knowledge_proof_expired' => now()->addDays(28),
+                'randomness' => $data['jwtRandomness'],
+                ...$data,
+            ]);
+        }
     }
 }

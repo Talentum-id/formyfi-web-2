@@ -36,5 +36,6 @@ class ZkIdentity extends Model
      */
     protected $casts = [
         'zero_knowledge_proof' => 'json',
+        'zero_knowledge_proof_expired' => 'datetime',
     ];
 }
