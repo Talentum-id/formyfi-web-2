@@ -48,6 +48,15 @@ class SocialiteController extends Controller
             $url = str_replace('twitter.com/', 'x.com/', $url);
         }
 
+        $testUris = config('services.test_uris');
+        if ($testUris) {
+            $uris = explode(',', $testUris);
+            $refererDomain = parse_url($request->header('referer'), PHP_URL_HOST);
+            if (in_array($refererDomain, $uris)) {
+                $url = str_replace($request->getHost(), $refererDomain, $url);
+            }
+        }
+
         return response()->json(compact('url'));
     }
 
