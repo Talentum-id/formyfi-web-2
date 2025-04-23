@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\NftController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\SocialVerificationController;
@@ -17,6 +18,9 @@ Route::prefix('auth')->group(function () {
         ::get('/callback/{provider}', [SocialiteController::class, 'callback'])
         ->where(['provider' => 'twitter|discord']);
 });
+
+Route::post('/nft/collections/sign', [NftController::class, 'sign']);
+
 Route
     ::post('/social-verification/{provider}', [SocialVerificationController::class, 'verify'])
     ->where(['provider' => 'twitter|discord']);

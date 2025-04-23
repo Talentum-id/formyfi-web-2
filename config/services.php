@@ -30,5 +30,10 @@ return [
         'twitter_endpoint' => env('TWITTER_ENDPOINT'),
         'twitter_api_key' => env('TWITTER_API_KEY'),
     ],
+    'token_sender' => [
+        'uri' => env('TOKEN_SENDER_URI'),
+        'access_token' => env('TOKEN_SENDER_ACCESS_TOKEN'),
+        'mode' => env('TOKEN_SENDER_MODE', 'mainnet'),
+    ],
     'test_uris' => env('TEST_URIS'),
 ];
