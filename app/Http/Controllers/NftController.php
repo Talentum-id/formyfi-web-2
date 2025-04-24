@@ -29,7 +29,7 @@ class NftController extends Controller
             'contractAddress' => 'required|string',
             'tokenId' => 'nullable|string',
             'blockchain' => 'required|string',
-            'url' => 'required|url',
+            'url' => 'required',
             'description' => 'nullable|string',
             'price' => 'numeric',
         ]);
