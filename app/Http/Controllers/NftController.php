@@ -31,7 +31,7 @@ class NftController extends Controller
             'blockchain' => 'required|string',
             'url' => 'required|url',
             'description' => 'nullable|string',
-            'price' => 'float',
+            'price' => 'numeric',
         ]);
 
         $result = $this->mintSignService->handle(new NftMintDto(
