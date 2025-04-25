@@ -25,6 +25,7 @@ class NftController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
+            'nonce' => 'required|string',
             'wallet' => 'required|string',
             'contractAddress' => 'required|string',
             'tokenId' => 'nullable|string',
@@ -35,7 +36,7 @@ class NftController extends Controller
         ]);
 
         $result = $this->mintSignService->handle(new NftMintDto(
-            nonce: '0x' . bin2hex(random_bytes(self::NONCE_LENGTH)),
+            nonce: $validated['nonce'],
             name: $validated['name'],
             price: $validated['price'],
             args: $validated['description'] ?? '',
