@@ -35,7 +35,7 @@ class NftController extends Controller
         ]);
 
         $result = $this->mintSignService->handle(new NftMintDto(
-            nonce: bin2hex(random_bytes(self::NONCE_LENGTH)),
+            nonce: '0x' . bin2hex(random_bytes(self::NONCE_LENGTH)),
             name: $validated['name'],
             price: $validated['price'],
             args: $validated['description'] ?? '',
@@ -43,7 +43,7 @@ class NftController extends Controller
             wallet: $validated['wallet'],
             contractAddress: $validated['contractAddress'],
             url: $validated['url'],
-            tokenId: $validated['tokenId'],
+            tokenId: $validated['tokenId'] ?? null,
         ));
 
         return response()->json($result);
