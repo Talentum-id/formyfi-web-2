@@ -19,7 +19,7 @@ final class MintSignService
 
     private function getHandler(string $typeChain): MintHandlerInterface
     {
-        return match ($typeChain) {
+        return match (strtolower($typeChain)) {
             'sui' => new SuiMintHandler(),
             default => new EvmMintHandler(),
         };
