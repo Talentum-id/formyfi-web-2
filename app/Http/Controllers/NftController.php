@@ -81,7 +81,7 @@ class NftController extends Controller
 
         $uniqId = uniqid();
         $path = Storage::put('/nft-collections/' . $uniqId, $data['file']);
-        $filePath = Storage::get((string)$path);
+        $filePath = config('filesystems.disks.s3.url') . '/' . $path;
 
         return sprintf('%s/api/nft/metadata?url=%s&name=%s', config('app.url'), $filePath, $data['name']);
     }
