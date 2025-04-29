@@ -19,7 +19,11 @@ Route::prefix('auth')->group(function () {
         ->where(['provider' => 'twitter|discord']);
 });
 
-Route::post('/nft/collections/sign', [NftController::class, 'sign']);
+Route::prefix('nft')->group(function () {
+    Route::post('/collections/sign', [NftController::class, 'sign']);
+    Route::get('/metadata', [NftController::class, 'getMetadata']);
+    Route::post('/file', [NftController::class, 'uploadFile']);
+});
 
 Route
     ::post('/social-verification/{provider}', [SocialVerificationController::class, 'verify'])
