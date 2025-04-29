@@ -57,13 +57,14 @@ class NftController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
-            'url' => 'required|url',
+            'url' => 'required|string',
         ]);
 
         try {
+            $url = Storage::get($data['url']);
             return response()->json([
                 'name' => $data['name'],
-                'url' => $data['url'],
+                'url' => $url,
             ]);
         } catch (GuzzleException) {
             return response()->json([
