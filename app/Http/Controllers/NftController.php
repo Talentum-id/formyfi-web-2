@@ -57,14 +57,13 @@ class NftController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
-            'url' => 'required|string',
+            'url' => 'required|url',
         ]);
 
         try {
-            $url = Storage::get($data['url']);
             return response()->json([
                 'name' => $data['name'],
-                'url' => $url,
+                'url' => $data['url'],
             ]);
         } catch (GuzzleException) {
             return response()->json([
@@ -82,7 +81,8 @@ class NftController extends Controller
 
         $uniqId = uniqid();
         $path = Storage::put('/nft-collections/' . $uniqId, $data['file']);
+        $filePath = Storage::get((string)$path);
 
-        return sprintf('%s/api/nft/metadata?url=%s&name=%s', config('app.url'), $path, $data['name']);
+        return sprintf('%s/api/nft/metadata?url=%s&name=%s', config('app.url'), $filePath, $data['name']);
     }
 }
