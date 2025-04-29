@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Services\Nft\Dto\NftMintDto;
 use App\Services\Nft\MintSignService;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -57,30 +56,32 @@ class NftController extends Controller
     public function getMetadata(Request $request): JsonResponse
     {
         $data = $request->validate([
+            'name' => 'required|string',
             'url' => 'required|url',
         ]);
 
         try {
-            $client = new Client();
-            $result = $client->request('GET', $data['url'])->getBody()->getContents();
+            return response()->json([
+                'name' => $data['name'],
+                'url' => $data['url'],
+            ]);
         } catch (GuzzleException) {
             return response()->json([
                 'message' => 'Url did return correct response',
             ], Response::HTTP_BAD_REQUEST);
         }
-
-        return response()->json(json_decode($result, true));
     }
 
     public function uploadFile(Request $request): string
     {
         $data = $request->validate([
+            'name' => 'required|string',
             'file' => 'required|file',
         ]);
 
         $uniqId = uniqid();
         $path = Storage::put('/nft-collections/' . $uniqId, $data['file']);
 
-        return sprintf('%s/api/nft/metadata?url=%s', config('app.url'), $path);
+        return sprintf('%s/api/nft/metadata?url=%s&name=%s', config('app.url'), $path, $name);
     }
 }
