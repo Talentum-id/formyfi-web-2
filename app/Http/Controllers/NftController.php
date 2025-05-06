@@ -63,7 +63,7 @@ class NftController extends Controller
         try {
             return response()->json([
                 'name' => $data['name'],
-                'url' => $data['url'],
+                'image' => $data['url'],
             ]);
         } catch (GuzzleException) {
             return response()->json([
