@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\NftController;
 use App\Http\Controllers\ResponseController;
@@ -18,6 +19,8 @@ Route::prefix('auth')->group(function () {
         ::get('/callback/{provider}', [SocialiteController::class, 'callback'])
         ->where(['provider' => 'twitter|discord']);
 });
+
+Route::get('/verify-captcha', [CaptchaController::class, 'verify']);
 
 Route::prefix('nft')->group(function () {
     Route::post('/collections/sign', [NftController::class, 'sign']);
