@@ -7,6 +7,7 @@ namespace App\Services\Nft\MintHandlers;
 use App\Services\Nft\Dto\NftMintDto;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class SuiMintHandler implements MintHandlerInterface
 {
@@ -34,6 +35,11 @@ class SuiMintHandler implements MintHandlerInterface
             );
 
         $data = $request->json();
+
+        Log::info('Information on minting: '. $mintDto->name, [
+            'payload' => $payload,
+            'response' => $data,
+        ]);
 
         if (!$request->successful() || (isset($data['status']) && $data['status'] === 'failed')) {
             return null;
