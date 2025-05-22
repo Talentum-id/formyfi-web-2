@@ -18,10 +18,13 @@ class SuiMintHandler implements MintHandlerInterface
      */
     public function handle(NftMintDto $mintDto): ?array
     {
+        $filePath = config('filesystems.disks.s3.url') . '/' . $mintDto->url;
+        $nftUrl = sprintf('%s/api/nft/metadata?url=%s&name=%s', config('app.url'), $filePath, $mintDto->name);
+
         $payload = [
             'nftName' => $mintDto->name,
             'nftDesc' => $mintDto->name,
-            'nftUrl' => $mintDto->url,
+            'nftUrl' => $nftUrl,
             'price' => floor($mintDto->price * 10 ** 9),
             'endTime' => now()->addWeeks(self::FOREVER_TIMEOUT)->timestamp,
             'mode' => config('services.token_sender.mode', 'mainnet'),
