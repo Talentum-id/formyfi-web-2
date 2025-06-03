@@ -16,6 +16,7 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
     'recaptcha' => [
+        'key' => env('GOOGLE_CAPTCHA_KEY'),
         'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
     ],
     'ses' => [
