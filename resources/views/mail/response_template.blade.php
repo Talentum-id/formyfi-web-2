@@ -14,6 +14,7 @@
         .container {
             background: #e9ecf2;
             text-align: center;
+            padding: 20px;
         }
         .header {
             text-align: center;
@@ -54,13 +55,14 @@
             height: 32px;
             border-radius: 50%;
             background-color: #afb8c9;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            vertical-align: middle;
         }
         .user-icon {
-            width: 40px;
-            height: 40px;
+            width: 16px;
+            height: 16px;
             fill: white;
         }
         .subtitle {
@@ -116,6 +118,7 @@
             font-size: 12px;
             margin-top: 32px;
             line-height: 1.7;
+            padding: 20px;
         }
         .footer a {
             color: #4f46e5;
@@ -135,9 +138,8 @@
             padding: 32px 24px 32px 24px;
             margin: 0 auto 40px auto;
             max-width: 556px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: block;
+            text-align: center;
         }
         .mail-section-icon {
             margin-bottom: 24px;
@@ -180,35 +182,34 @@
             font-family: Arial, sans-serif;
         }
         .quiz-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: block;
             margin-bottom: 12px;
         }
         .quiz-card-step {
             font-size: 14px;
             color: #64748b;
             font-weight: 500;
+            float: left;
         }
         .quiz-card-required {
             font-size: 9px;
             color: #eb6854;
             font-weight: 500;
+            float: right;
         }
         .quiz-card-title {
             font-size: 18px;
             font-weight: 500;
             color: #23263b;
             margin-bottom: 16px;
+            clear: both;
         }
         .quiz-card-image {
             margin-bottom: 16px;
             text-align: center;
         }
         .quiz-card-options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            display: block;
         }
         .quiz-card-option {
             background: #f1f5f9;
@@ -216,8 +217,8 @@
             padding: 10px 14px;
             font-size: 15px;
             color: #23263b;
-            display: flex;
-            align-items: center;
+            display: block;
+            margin-bottom: 8px;
             position: relative;
         }
         .quiz-card-option.correct {
@@ -261,7 +262,7 @@
         }
         .cover-img {
             width: 100%;
-            max-width: 756px;
+            max-width: 556px;
             height: 160px;
             object-fit: cover;
             border-radius: 12px;
@@ -269,9 +270,7 @@
             margin: 0 auto 16px auto;
         }
         .cover-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: block;
             margin-bottom: 12px;
         }
         .cover-avatar {
@@ -280,24 +279,23 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #e2e8f0;
+            float: left;
+            margin-right: 12px;
         }
         .cover-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: block;
             font-size: 13px;
             color: #64748b;
+            line-height: 32px;
         }
         .cover-users {
-            display: inline-flex;
-            align-items: center;
+            display: inline-block;
             margin-left: 8px;
         }
         .cover-users img {
             height: 16px;
             width: 16px;
         }
-
         .cover-users-count {
             font-size: 13px;
             color: #64748b;
@@ -308,11 +306,10 @@
             font-weight: 500;
             color: #23263b;
             margin: 16px 0 8px 0;
+            clear: both;
         }
         .cover-steps {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: block;
             font-size: 15px;
             color: #64748b;
         }
@@ -347,6 +344,18 @@
         }
         .social-icon {
             text-decoration: none;
+        }
+
+        /* Email client compatibility fixes */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
         }
     </style>
 </head>
@@ -430,22 +439,23 @@
             </defs>
         </svg>
     </div>
+
     <div class="cover-block">
         <img
             class="cover-img"
             src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$quest['image']) }}"
-            alt=""
+            alt="Quest Cover Image"
         />
 
-        <div class="cover-info">
+        <div class="cover-info clearfix">
             @if (!empty($author['avatar']))
                 <img
-                    src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$author['avatar'][0])  }}"
-                    alt="avatar"
+                    src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$author['avatar'][0]) }}"
+                    alt="Author Avatar"
                     class="cover-avatar"
                 />
             @else
-                <div class="avatar-fallback">
+                <div class="avatar-fallback cover-avatar">
                     <svg class="user-icon" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
@@ -457,62 +467,68 @@
                 <span class="cover-date">{{ date('M d, Y', $quest['end']) }}</span>
             </div>
         </div>
+
         <div class="cover-title">{{ $quest['title'] }}</div>
         <div class="cover-steps">
             <span class="cover-steps-label">{{ count($quest['questions']) }} steps</span>
         </div>
     </div>
+
     @foreach ($quest['questions'] as $index => $question)
         <div class="quiz-card">
-            <div class="quiz-card-header">
+            <div class="quiz-card-header clearfix">
                 <span class="quiz-card-step">{{ $index + 1 }}/{{ count($quest['questions']) }}</span>
                 @if ($question['required'])
                     <span class="quiz-card-required">Required</span>
                 @endif
             </div>
+
             @if (in_array($question['questionType'], ['quiz']))
                 <div class="quiz-card-title">{{ $question['question'] }}</div>
                 <div class="quiz-card-options">
-                    @if ($question['questionType'] === 'miltiple')
+                    @if ($question['questionType'] === 'multiple')
                         @foreach ($question['answers'] as $option)
-                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && in_array($option['answer'], $answers[$index]['answer'])) wrong @endif">
+                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && in_array($option['answer'], $answers[$index]['answer'])) wrong @endif">
                                 {{ $option['answer'] }}
                             </div>
                         @endforeach
                     @else
                         @foreach ($question['answers'] as $option)
-                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && $option['answer'] === $answers[$index]['answer']) wrong @endif">
+                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && $option['answer'] === $answers[$index]['answer']) wrong @endif">
                                 {{ $option['answer'] }}
                             </div>
                         @endforeach
                     @endif
+                </div>
             @else
                 <div class="quiz-card-title">
                     {{ $question['question'] }}
                 </div>
                 <div class="quiz-card-options">
-                    <div class="quiz-card-option @if(!empty($question['answers']) && $question['answers'][0] !== $answers[$index]['answer']) wrong @else correct @endif }}">
-                        @if ($question['questionType'] === 'address')
+                    <div class="quiz-card-option @if(!empty($question['answers']) && isset($answers[$index]['answer']) && $question['answers'][0] !== $answers[$index]['answer']) wrong @else correct @endif">
+                        @if ($question['questionType'] === 'address' && isset($answers[$index]['answer']))
                             <span>
-                                {{ implode(', ', array_values(json_decode($answers[$index]['answer'], true))) }}
+                                {{ implode(', ', array_values(json_decode($answers[$index]['answer'], true) ?? [])) }}
                             </span>
-                        @elseif ($question['questionType'] === 'date')
+                        @elseif ($question['questionType'] === 'date' && isset($answers[$index]['answer']))
                             <span>
                                 {{ date('D M j Y', $answers[$index]['answer']) }}
                             </span>
                         @else
                             <span>
-                                {{ $answers[$index]['answer'] ?: 'No Answer' }}
+                                {{ ($answers[$index]['answer'] ?? '') ?: 'No Answer' }}
                             </span>
                         @endif
                     </div>
                 </div>
             @endif
-            <div class="footer">
-                © FormyFi Platform {{ date('Y') }}. All rights reserved.<br />
-                Please don't reply to this email.
-            </div>
         </div>
     @endforeach
+
+    <div class="footer">
+        © FormyFi Platform {{ date('Y') }}. All rights reserved.<br />
+        Please don't reply to this email.
+    </div>
+</div>
 </body>
 </html>
