@@ -43,6 +43,26 @@
             text-decoration: none;
             font-weight: 500;
         }
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .avatar-fallback {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #afb8c9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
         .subtitle {
             color: #23263b;
             font-size: 18px;
@@ -332,8 +352,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- Блок-обложка и инфо -->
-
     <div class="header">
         <svg
             width="1016"
@@ -420,11 +438,19 @@
         />
 
         <div class="cover-info">
-            <img
-                src=""
-                alt="avatar"
-                class="cover-avatar"
-            />
+            @if (!empty($author['avatar']))
+                <img
+                    src="{{ $message->embed(config('filesystems.disks.s3.url').'/'.$author['avatar'][0])  }}"
+                    alt="avatar"
+                    class="cover-avatar"
+                />
+            @else
+                <div class="avatar-fallback">
+                    <svg class="user-icon" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            @endif
             <div class="cover-meta">
                 <span class="cover-date">{{ date('M d, Y', $quest['start']) }}</span>
                 <span class="cover-date">–</span>
