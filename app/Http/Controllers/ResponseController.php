@@ -15,9 +15,10 @@ class ResponseController extends Controller
             'quest' => 'required|array',
             'answers' => 'required|array',
             'email' => 'required|email',
+            'author' => 'required|array',
         ]);
 
-        Mail::to($data['email'])->send(new SendResponseDuplicateMail($data['quest'], $data['answers']));
+        Mail::to($data['email'])->send(new SendResponseDuplicateMail($data['quest'], $data['answers'], $data['author']));
 
         return response()->noContent();
     }

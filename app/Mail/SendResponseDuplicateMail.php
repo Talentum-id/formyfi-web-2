@@ -14,8 +14,11 @@ class SendResponseDuplicateMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(private readonly array $quest, private readonly array $answers)
-    {
+    public function __construct(
+        private readonly array $quest,
+        private readonly array $answers,
+        private readonly array $author,
+    ) {
     }
 
     public function envelope(): Envelope
@@ -32,6 +35,7 @@ class SendResponseDuplicateMail extends Mailable implements ShouldQueue
             with: [
                 'quest' => $this->quest,
                 'answers' => $this->answers,
+                'author' => $this->author,
             ]
         );
     }
