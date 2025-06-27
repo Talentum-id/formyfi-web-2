@@ -19,8 +19,7 @@
         .header {
             text-align: center;
         }
-        .header svg {
-            max-height: 200px;
+        .header img {
             width: 100%;
             height: auto;
             display: block;
@@ -61,8 +60,8 @@
             vertical-align: middle;
         }
         .user-icon {
-            width: 16px;
-            height: 16px;
+            width: 32px;
+            height: 32px;
             fill: white;
         }
         .subtitle {
@@ -116,7 +115,6 @@
             text-align: center;
             color: #8a8fa7;
             font-size: 12px;
-            margin-top: 32px;
             line-height: 1.7;
             padding: 20px;
         }
@@ -362,82 +360,7 @@
 <body>
 <div class="container">
     <div class="header">
-        <svg
-            width="1016"
-            height="200"
-            viewBox="0 0 1016 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <g clip-path="url(#clip0_10289_51512)">
-                <rect width="1016" height="200" fill="#38405B" />
-                <mask
-                    id="mask0_10289_51512"
-                    style="mask-type: alpha"
-                    maskUnits="userSpaceOnUse"
-                    x="-1"
-                    y="0"
-                    width="1017"
-                    height="200"
-                >
-                    <rect
-                        x="1016"
-                        y="200"
-                        width="1016"
-                        height="200"
-                        transform="rotate(180 1016 200)"
-                        fill="#38405B"
-                    />
-                </mask>
-                <g mask="url(#mask0_10289_51512)">
-                    <rect
-                        opacity="0.45"
-                        width="798.068"
-                        height="916.369"
-                        transform="matrix(-0.966436 0.256907 -0.864519 -0.502601 774.131 232.688)"
-                        fill="url(#paint0_linear_10289_51512)"
-                    />
-                    <rect
-                        opacity="0.3"
-                        width="790.477"
-                        height="931.415"
-                        transform="matrix(-0.963949 -0.266089 0.872551 -0.488522 406.023 424.848)"
-                        fill="url(#paint1_linear_10289_51512)"
-                    />
-                    <path
-                        d="M542.745 107.396L550.916 86.1387H557.435L544.055 118.447C542.246 122.977 540.998 125 536.726 125H529.615V119.807H537.069L539.377 114.25C539.34 114.161 532.002 96.741 527.474 86.1387H534.449L542.745 107.396ZM443.764 85.8066C452.403 85.8066 458.328 91.604 458.328 100.119C458.328 108.695 452.402 114.432 443.764 114.432C435.063 114.401 429.199 108.664 429.199 100.119C429.199 91.6041 435.062 85.8067 443.764 85.8066ZM516.866 85.8066C522.698 85.8066 526.316 89.6108 526.316 96.1328V114.1H520.391V96.6768C520.391 93.3553 518.863 91.0909 515.65 91.0908C512.376 91.0908 510.474 93.5368 510.474 96.8281V114.1H504.548V96.6768C504.548 93.6271 503.3 91.0909 499.683 91.0908C496.408 91.0908 494.599 93.5363 494.599 96.9785V114.069H488.673V86.1387H494.1V88.9766C495.69 86.9536 498.154 85.8068 501.272 85.8066C504.609 85.8066 507.323 87.3768 508.727 89.9434C510.473 87.3768 513.249 85.8067 516.866 85.8066ZM596.907 86.1387C599.652 86.1389 601.896 88.3127 601.896 90.9697V108.937H610.13V114.1H587.395V108.906H595.753V91.3018H587.395V86.1387H596.907ZM472.519 90.8789C473.922 88.4332 476.417 86.1387 481.5 86.1387H484.713V91.6641H480.533V91.6338C474.608 91.6339 472.644 95.7711 472.644 100.149V108.876H480.877V114.069H460.387V108.876H466.53V91.3018H460.387V86.1387H472.519V90.8789ZM426.455 98.3076H410.362V113.888H404V100.119C404 94.9859 406.682 92.4492 411.922 92.4492H426.455V98.3076ZM584.429 98.3076H568.336V113.888H561.974V100.119C561.974 94.9859 564.656 92.4492 569.896 92.4492H584.429V98.3076ZM443.764 90.8486C438.743 90.8486 435.405 94.7142 435.405 100.119C435.405 105.524 438.743 109.389 443.764 109.389C448.722 109.389 452.06 105.524 452.06 100.119C452.06 94.7142 448.722 90.8486 443.764 90.8486ZM429.012 80.4619H410.362V90.3926H404V82.0928C404 77.2917 406.682 74.6035 411.734 74.6035H429.012V80.4619ZM586.986 74.6035V80.4619H568.336V90.3926H561.974V82.0928C561.974 77.2917 564.656 74.6036 569.708 74.6035H586.986ZM598.778 74C601.086 74.0001 602.895 75.6309 602.895 77.8652C602.894 80.1599 601.086 81.7899 598.778 81.79C596.533 81.8202 594.724 80.16 594.724 77.8652C594.724 75.6308 596.533 74 598.778 74Z"
-                        fill="white"
-                    />
-                </g>
-            </g>
-            <defs>
-                <linearGradient
-                    id="paint0_linear_10289_51512"
-                    x1="9.32816e-07"
-                    y1="306.305"
-                    x2="798.068"
-                    y2="306.305"
-                    gradientUnits="userSpaceOnUse"
-                >
-                    <stop stop-color="#DAD9F7" />
-                    <stop offset="0.416663" stop-color="#38405B" stop-opacity="0" />
-                </linearGradient>
-                <linearGradient
-                    id="paint1_linear_10289_51512"
-                    x1="9.23942e-07"
-                    y1="311.334"
-                    x2="790.477"
-                    y2="311.334"
-                    gradientUnits="userSpaceOnUse"
-                >
-                    <stop stop-color="#DAD9F7" />
-                    <stop offset="0.416663" stop-color="#38405B" stop-opacity="0" />
-                </linearGradient>
-                <clipPath id="clip0_10289_51512">
-                    <rect width="1016" height="200" fill="white" />
-                </clipPath>
-            </defs>
-        </svg>
+        <img src="{{ $message->embed('https://formyfi-files.s3.eu-central-1.amazonaws.com/ic/static/formyfi.png') }}" alt="">
     </div>
 
     <div class="cover-block">
@@ -456,9 +379,7 @@
                 />
             @else
                 <div class="avatar-fallback cover-avatar">
-                    <svg class="user-icon" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                    <img class="user-icon" src="{{ $message->embed('https://formyfi-files.s3.eu-central-1.amazonaws.com/ic/static/user.png') }}" alt="">
                 </div>
             @endif
             <div class="cover-meta">
