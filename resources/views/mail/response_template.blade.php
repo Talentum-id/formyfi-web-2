@@ -404,18 +404,18 @@
                 @endif
             </div>
 
-            @if (in_array($question['questionType'], ['quiz']))
+            @if (in_array($question['questionType'], ['quiz', 'multiple']))
                 <div class="quiz-card-title">{{ $question['question'] }}</div>
                 <div class="quiz-card-options">
                     @if ($question['questionType'] === 'multiple')
                         @foreach ($question['answers'] as $option)
-                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && in_array($option['answer'], $answers[$index]['answer'])) wrong @endif">
+                            <div class="quiz-card-option @if($option['isCorrect'] && isset($answers[$index]['answer']) && in_array($option['answer'], json_decode($answers[$index]['answer']))) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && in_array($option['answer'], json_decode($answers[$index]['answer']))) wrong @endif">
                                 {{ $option['answer'] }}
                             </div>
                         @endforeach
                     @else
                         @foreach ($question['answers'] as $option)
-                            <div class="quiz-card-option @if($option['isCorrect']) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && $option['answer'] === $answers[$index]['answer']) wrong @endif">
+                            <div class="quiz-card-option @if($option['isCorrect'] && isset($answers[$index]['answer']) && $option['answer'] === $answers[$index]['answer']) correct @elseif(!$option['isCorrect'] && isset($answers[$index]['answer']) && $option['answer'] === $answers[$index]['answer']) wrong @endif">
                                 {{ $option['answer'] }}
                             </div>
                         @endforeach
@@ -426,7 +426,7 @@
                     {{ $question['question'] }}
                 </div>
                 <div class="quiz-card-options">
-                    <div class="quiz-card-option @if(!empty($question['answers']) && isset($answers[$index]['answer']) && $question['answers'][0] !== $answers[$index]['answer']) wrong @else correct @endif">
+                    <div class="quiz-card-option @if(!empty($question['answers'][0]) && !empty($question['answers'][0]['answer']) && isset($answers[$index]['answer']) && $question['answers'][0]['answer'] !== $answers[$index]['answer']) wrong @elseif(!empty($question['answers'][0]) && !empty($question['answers'][0]['answer']) && isset($answers[$index]['answer']) && $question['answers'][0]['answer'] === $answers[$index]['answer']) correct @endif">
                         @if ($question['questionType'] === 'address' && isset($answers[$index]['answer']))
                             <span>
                                 {{ implode(', ', array_values(json_decode($answers[$index]['answer'], true) ?? [])) }}
